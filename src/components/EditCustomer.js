@@ -1,12 +1,14 @@
 import React, { useState}  from 'react';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import EditIcon from '@material-ui/icons/Edit';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-function AddCustomer(props) {
+function EditCustomer(props) {
     const [open, setOpen] = useState(false);
     const [customer, SetCustomer] = useState({
         firstname: '',
@@ -15,10 +17,22 @@ function AddCustomer(props) {
         postcode: '',
         city: '',
         email: '',
-        phone: ''
+        phone: '',
+        url: '',
     });
 
     const handleClickOpen = () => {
+//      console.log(props.customer);
+      SetCustomer({
+        firstname: props.customer.firstname,
+        lastname: props.customer.lastname,
+        streetaddress: props.customer.streetaddress,
+        postcode: props.customer.postcode,
+        city: props.customer.city,
+        email: props.customer.email,
+        phone: props.customer.phone,
+        url: props.customer.links[0].href
+      });  
       setOpen(true);
     };
   
@@ -27,12 +41,11 @@ function AddCustomer(props) {
     };
   
     const handleSave = () => {
-// send customer state to AddCustomer function (define in Customers.js)
-        props.addCustomer(customer);
+// send customer state to EditCustomer function (define in Customers.js)
+        props.editCustomer(customer);
 // close modal
         setOpen(false);    
     };
-
 
     const inputChanged = (event) => {
         SetCustomer({...customer, [event.target.name]: event.target.value});
@@ -40,11 +53,11 @@ function AddCustomer(props) {
 
     return (
       <div>
-        <Button style={{ marginLeft: 100, marginTop: 20 }} variant="outlined" color="primary" onClick={handleClickOpen}>
-          Add Customer
-        </Button>
+        <IconButton color="primary" onClick={handleClickOpen}>
+            <EditIcon />
+        </IconButton>
         <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-          <DialogTitle id="form-dialog-title">New Customer</DialogTitle>
+          <DialogTitle id="form-dialog-title">Edit Customer</DialogTitle>
           <DialogContent>
             <TextField
               margin="dense"
@@ -116,4 +129,4 @@ function AddCustomer(props) {
     );
 }
 
-export default AddCustomer;
+export default EditCustomer;

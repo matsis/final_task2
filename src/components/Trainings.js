@@ -17,21 +17,21 @@ function Trainings() {
 
 
   const deleteTraining = (id) => {
-//      console.log(id);
-       if(window.confirm('Are you sure?')) {
-        let url = "https://customerrest.herokuapp.com/trainings/" + id;
-        console.log(url); 
-        fetch(url, { method: 'DELETE'})
-        .then(response => {
-           //if response 2XX
-           if (response.ok)
-            //fetch Training list again
-            fetchTrainings();
-           else
-            alert('Something went wrong!');
-        })
-        .catch(err => console.error(err))
-       }
+//    console.log(id);
+    if(window.confirm('Are you sure you want to delete this training?')) {
+      let url = "https://customerrest.herokuapp.com/api/trainings/" + id;
+      console.log(url); 
+      fetch(url, { method: 'DELETE'})
+      .then(response => {
+      //if response 2XX
+      if (response.ok)
+      //fetch Training list again
+        fetchTrainings();
+      else
+        alert('Something went wrong!');
+      })
+      .catch(err => console.error(err))
+      }
    }
    
 
@@ -45,17 +45,15 @@ function Trainings() {
   const columns = [
     { headerName: 'Activity', field: 'activity', sortable: true, filter: true },
     { headerName: 'Date', field: 'date', sortable: true, filter: true, 
-
-    cellRendererFramework: params => {
+        cellRendererFramework: params => {
           return moment(params.value).format("DD.MM.yyyy HH:mm")
         } 
- 
-      }, 
+    }, 
     { headerName: 'Duration (min)', field: 'duration', sortable: true, filter: true },
     { headerName: 'First Name', field: 'customer.firstname', sortable: true, filter: true},
     { headerName: 'Last Name', field: 'customer.lastname', sortable: true, filter: true },    
     { headerName: '', 
-      field: 'links[0].href',
+      field: 'deletetraining',
       width: 100,
       sortable: false, filter: false,
       cellRendererFramework: params => 
@@ -63,14 +61,10 @@ function Trainings() {
         <DeleteIcon />
       </IconButton>
     },
-  
   ]
  
-
-
   return (
     <div className="Trainings">
-
         <div className="ag-theme-material" style={{ height: 600, width: '90%', margin: 'auto' }}>
           <AgGridReact
             defaultColDef={{

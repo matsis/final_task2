@@ -5,8 +5,7 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddCustomer from './AddCustomer';
 import AddTraining from './AddTraining';
-import moment from 'moment';
-import 'moment/locale/fi';
+import EditCustomer from './EditCustomer';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
@@ -21,7 +20,7 @@ function Customers() {
 
   const deleteCustomer = (url) => {
  //   console.log(url);
-    if(window.confirm('Are you sure?')) {
+    if(window.confirm('Are you sure to delete this customer?')) {
       //    console.log(url);
       fetch(url, { method: 'DELETE'})
       .then(response => {
@@ -55,8 +54,27 @@ const addCustomer = (newCustomer) => {
   .catch(err => console.error(err))         
 }
 
+const editCustomer = (editCustomer) => {
+  console.log(editCustomer);
+  fetch(editCustomer.url, {
+    method: 'PUT',
+// Js object to JSON format
+    body: JSON.stringify(editCustomer),
+    headers: { 'Content-type' : 'application/json' }
+  })
+  .then(response => {
+    //jos response 2XX
+    if (response.ok)
+    //haetaan asiakkaat uudestaan
+    fetchCustomers();
+    else
+      alert('Something went wrong!');
+  })
+  .catch(err => console.error(err))   
+}
+
 const addTraining = (newTraining) => {
-  console.log(newTraining);
+//  console.log(newTraining);
   fetch('https://customerrest.herokuapp.com/api/trainings', {
     method: 'POST',
 // Js object to JSON format
@@ -84,8 +102,8 @@ const addTraining = (newTraining) => {
 
   const columns = [
     { headerName: '', 
-      field: 'links[0].href',
-      width: 100,
+      field: 'deletecustomer',
+      width: 60,
       sortable: false, filter: false,
       cellRendererFramework: params => 
       <IconButton color="secondary" onClick={() => deleteCustomer(params.data.links[0].href)}>
@@ -93,20 +111,29 @@ const addTraining = (newTraining) => {
       </IconButton>
     },
     { headerName: '', 
-      field: 'addcustomer',
-      width: 200,
+      field: 'editcustomer',
+      width: 60,
+      sortable: false, filter: false,
+      cellRendererFramework: params => 
+        <div>
+          <EditCustomer editCustomer={editCustomer} customer={params.data}/>
+        </div>
+    },
+    { headerName: '', 
+      field: 'addtraining',
+      width: 150,
       sortable: false, filter: false,
       cellRendererFramework: params => 
         <div>
           <AddTraining addTraining={addTraining} customer={params.data.links[0].href}/>
         </div>
     },
-    { field: 'firstname', sortable: true, filter: true },
-    { field: 'lastname', sortable: true, filter: true },
-    { field: 'email', sortable: true, filter: true },
-    { field: 'phone', sortable: true, filter: true },
+    { field: 'firstname', sortable: true, filter: true, width: 150 },
+    { field: 'lastname', sortable: true, filter: true, width: 150 },
+    { field: 'email', sortable: true, filter: true, width: 250 },
+    { field: 'phone', sortable: true, filter: true, width: 150 },
     { field: 'streetaddress', sortable: true, filter: true },
-    { field: 'postcode', sortable: true, filter: true },
+    { field: 'postcode', sortable: true, filter: true, width: 120 },
     { field: 'city', sortable: true, filter: true },
   ]
 
@@ -117,8 +144,6 @@ const addTraining = (newTraining) => {
         <AddCustomer addCustomer={addCustomer} />
           <AgGridReact
                 defaultColDef={{
-                    flex: 1,
-                    minWidth: 150,
                     filter: true,
                     sortable: true,
                     floatingFilter: true,
