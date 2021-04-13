@@ -110,9 +110,9 @@ const addTraining = (newTraining) => {
         <DeleteIcon />
       </IconButton>
     },
-    { headerName: '', 
+    { headerName: 'Actions', 
       field: 'editcustomer',
-      width: 60,
+      width: 100,
       sortable: false, filter: false,
       cellRendererFramework: params => 
         <div>
@@ -125,7 +125,7 @@ const addTraining = (newTraining) => {
       sortable: false, filter: false,
       cellRendererFramework: params => 
         <div>
-          <AddTraining addTraining={addTraining} customer={params.data.links[0].href}/>
+          <AddTraining addTraining={addTraining} customerUrl={params.data.links[0].href}/>
         </div>
     },
     { field: 'firstname', sortable: true, filter: true, width: 150 },

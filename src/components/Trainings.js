@@ -20,7 +20,7 @@ function Trainings() {
 //    console.log(id);
     if(window.confirm('Are you sure you want to delete this training?')) {
       let url = "https://customerrest.herokuapp.com/api/trainings/" + id;
-      console.log(url); 
+//      console.log(url); 
       fetch(url, { method: 'DELETE'})
       .then(response => {
       //if response 2XX
@@ -44,10 +44,10 @@ function Trainings() {
 
   const columns = [
     { headerName: 'Activity', field: 'activity', sortable: true, filter: true },
-    { headerName: 'Date', field: 'date', sortable: true, filter: true, 
+    { headerName: 'Time', field: 'date', sortable: true, filter: true, 
         cellRendererFramework: params => {
           return moment(params.value).format("DD.MM.yyyy HH:mm")
-        } 
+        }        
     }, 
     { headerName: 'Duration (min)', field: 'duration', sortable: true, filter: true },
     { headerName: 'First Name', field: 'customer.firstname', sortable: true, filter: true},
